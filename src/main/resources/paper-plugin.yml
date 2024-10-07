@@ -1,0 +1,4 @@
+name: renewables
+version: '1.0-SNAPSHOT'
+main: dev.seeruk.plugin.renewables.RenewablesPlugin
+api-version: '1.21'
