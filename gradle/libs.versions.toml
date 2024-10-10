@@ -1,0 +1,10 @@
+[versions]
+jackson = "2.18.0"
+paper-api = "1.21.1-R0.1-SNAPSHOT"
+
+[libraries]
+jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jackson" }
+jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jackson" }
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
+jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }

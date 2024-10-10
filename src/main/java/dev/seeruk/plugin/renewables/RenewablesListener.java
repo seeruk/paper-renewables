@@ -1,5 +1,6 @@
 package dev.seeruk.plugin.renewables;
 
+import dev.seeruk.plugin.renewables.config.Config;
 import org.bukkit.Material;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.event.EventHandler;
@@ -7,13 +8,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 import java.util.List;
-import java.util.logging.Logger;
+import java.util.Optional;
 
 public class RenewablesListener implements Listener {
-    private final Logger logger;
+    private final Config config;
 
-    public RenewablesListener(Logger logger) {
-        this.logger = logger;
+    public RenewablesListener(Config config) {
+        this.config = config;
     }
 
     @EventHandler
@@ -23,7 +24,7 @@ public class RenewablesListener implements Listener {
 
             if (anvils.contains(fallingBlock.getBlockData().getMaterial())) {
                 this.handleFallingAnvil(event, fallingBlock);
-                return;
+                return; // NOTE: Required if we're using this event for more thing in the future
             }
         }
     }
@@ -37,11 +38,11 @@ public class RenewablesListener implements Listener {
         var loc = event.getEntity().getLocation();
         var landedAt = loc.clone().add(0, -1, 0);
 
-        if (landedAt.getBlock().getType() == Material.COBBLESTONE) {
-            landedAt.getBlock().setType(Material.SAND);
-        }
+        var fromName = landedAt.getBlock().getType().name();
 
-        logger.warning("tracking falling " + fallingBlock.getBlockData().getMaterial().name() + " at "
-            + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " (landed)");
+        // Swap the material of the block, if it is configured to do so
+        Optional.ofNullable(this.config.anvilTransitions.materials.get(fromName))
+            .map(Material::getMaterial)
+            .ifPresent(toMaterial -> landedAt.getBlock().setType(toMaterial));
     }
 }
